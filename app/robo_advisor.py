@@ -12,7 +12,7 @@ response= requests.get(request_url)
 parsed_response=json.loads(response.text)
 
 last_refreshed= parsed_response["Meta Data"]["3. Last Refreshed"]
-
+latest_close= parsed_response["Time Series (Daily)"]["2021-03-05"]["4. close"]
 #breakpoint()
 #Info Outputs
 
@@ -25,8 +25,8 @@ print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 print("REQUEST AT: 2018-02-20 02:00pm")
 print("-------------------------")
-print("LATEST DAY:", {last_refreshed})
-print("LATEST CLOSE: $100,000.00")
+print("LATEST DAY:", last_refreshed)
+print("LATEST CLOSE:", float(latest_close))
 print("RECENT HIGH: $101,000.00")
 print("RECENT LOW: $99,000.00")
 print("-------------------------")
