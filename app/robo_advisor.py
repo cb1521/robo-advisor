@@ -1,5 +1,7 @@
 # this is the "app/robo_advisor.py" file
 
+import csv
+import os
 import requests
 import json
 
@@ -45,5 +47,27 @@ print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
+print("WRITING DATA TO CSV...")
+print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
+#csv_file_path= "data/prices.csv"
+
+csv_file_path= os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
+csv_headers= ["timestamp", "open", "high", "low", "close", "volume"]
+
+with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
+    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+    writer.writeheader() # uses fieldnames set above
+
+    #looping
+    for x in dates:
+        daily_prices= tsd[x]
+        writer.writerow({"timestamp": x, 
+        "open": daily_prices["1. open"], 
+        "high": daily_prices["2. high"], 
+        "low": daily_prices["3. low"], 
+        "close": daily_prices["4. close"], 
+        "volume": daily_prices["5. volume"]})
+
