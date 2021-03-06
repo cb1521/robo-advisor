@@ -12,7 +12,10 @@ response= requests.get(request_url)
 parsed_response=json.loads(response.text)
 
 last_refreshed= parsed_response["Meta Data"]["3. Last Refreshed"]
-latest_close= parsed_response["Time Series (Daily)"]["2021-03-05"]["4. close"]
+tsd= parsed_response["Time Series (Daily)"]
+dates=list(tsd.keys())
+latest_day= dates[0] #assumes latest day is first, may need to sort
+latest_close= parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 #breakpoint()
 #Info Outputs
 
