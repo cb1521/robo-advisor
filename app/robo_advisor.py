@@ -5,6 +5,7 @@ import os
 import requests
 import json
 import dotenv 
+import datetime
 dotenv.load_dotenv()
 
 #Info Inputs
@@ -20,13 +21,24 @@ if "Error Message" in str(response.text): #data validation method
     quit()
 #print(response.status_code) #200
 #print(response.text)
-print(type(response))
 parsed_response=json.loads(response.text)
 
 last_refreshed= parsed_response["Meta Data"]["3. Last Refreshed"]
+now= datetime.datetime.now()
 tsd= parsed_response["Time Series (Daily)"]
 dates=list(tsd.keys())
 latest_day= dates[0] #assumes latest day is first, may need to sort if not the case
+def to_usd(my_price):
+    """
+    Converts a numeric value to usd-formatted string, for printing and display purposes.
+    
+    Param: my_price (int or float) like 4000.444444
+    
+    Example: to_usd(4000.444444)
+    
+    Returns: $4,000.44
+    """
+    return f"${my_price:,.2f}" #> $12,000.71
 latest_close= tsd[latest_day]["4. close"]
 highs=[]
 lows=[]
@@ -37,6 +49,14 @@ for x in dates:
     lows.append(float(low_price))
 recent_high= max(highs)
 recent_low= min(lows)
+recommendation_guide= float(recent_high)/float(latest_close)
+#print(recommendation_guide)
+if recommendation_guide <= 1.1:
+    recommendation= "BUY!"
+    recommendation_reason= "The recent high is greater than the latest close by 10 percent or less. This suggests that the stock has not been volatile recently."
+else:
+    recommendation= "DON'T BUY."
+    recommendation_reason= "The recent high is greater than the latest close by more than 10 percent. This suggests that the stock is recently volatile and risky."
 #breakpoint()
 #Info Outputs
 
@@ -47,15 +67,15 @@ print("-------------------------")
 print("SELECTED SYMBOL:", symbol)
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
-print("REQUEST AT: 2018-02-20 02:00pm")
+print("REQUEST AT:", now.strftime("%Y-%m-%d %I:%M %p"))
 print("-------------------------")
 print("LATEST DATA FROM:", last_refreshed)
-print("LATEST CLOSE:", float(latest_close))
-print("RECENT HIGH:", float(recent_high))
-print("RECENT LOW:", float(recent_low))
+print("LATEST CLOSE:", to_usd(float(latest_close)))
+print("RECENT HIGH:", to_usd(float(recent_high)))
+print("RECENT LOW:", to_usd(float(recent_low)))
 print("-------------------------")
-print("RECOMMENDATION: BUY!")
-print("RECOMMENDATION REASON: TODO")
+print("RECOMMENDATION:", recommendation)
+print("RECOMMENDATION REASON:", recommendation_reason)
 print("-------------------------")
 print("WRITING DATA TO CSV...")
 print("-------------------------")
