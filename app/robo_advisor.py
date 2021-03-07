@@ -13,16 +13,20 @@ symbol= input("Please specify the stock symbol you wish to acquire data for: ")
 #print(type(symbol))
 api_key= os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url= f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
-print(request_url)
+#print(request_url)
 response= requests.get(request_url)
+if "Error Message" in str(response.text): #data validation method
+    print("It seems as if you input an invalid stock symbol! Please try again.")
+    quit()
 #print(response.status_code) #200
 #print(response.text)
+print(type(response))
 parsed_response=json.loads(response.text)
 
 last_refreshed= parsed_response["Meta Data"]["3. Last Refreshed"]
 tsd= parsed_response["Time Series (Daily)"]
 dates=list(tsd.keys())
-latest_day= dates[0] #assumes latest day is first, may need to sort
+latest_day= dates[0] #assumes latest day is first, may need to sort if not the case
 latest_close= tsd[latest_day]["4. close"]
 highs=[]
 lows=[]
