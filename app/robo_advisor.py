@@ -23,11 +23,12 @@ while True:
     if len(symbol)<1 or len(symbol)>5:
         print("You must enter a stock identifier that has between 1 to 5 characters. Try again!")
         continue
-    else:
-        pass
     #print(type(symbol))
-    if symbol.lower()== "done":
+    elif symbol.lower()== "done":
         break
+    elif symbol.lower() in symbol_list:
+        print("You have already entered this symbol during this session!")
+        continue
     elif len(symbol_list)== 5:
         print("You have reached your 5 stock limit. The first 5 stock symbols you have entered are the only ones that will be evaluated currently. If you still want to get data on this stock, you can do so after this session is complete.")
         while True:
@@ -40,8 +41,8 @@ while True:
                 print("Please enter either y or n.")
         break
     else:
-        symbol_list.append(symbol)
-#print(symbol_list)
+        symbol_list.append(symbol.lower())
+print(symbol_list)
 
 for ticker in symbol_list:
     api_key= os.environ.get("ALPHAVANTAGE_API_KEY")

@@ -24,7 +24,7 @@ pip install -r requirements.txt
 Start the program by putting the following command into the command line:
 
 ```py
-python shopping_cart.py
+python app/robo_advisor.py
 ```
 
 Once that command is entered, follow the instructions accordingly- there is an initial instruction that has more details.
