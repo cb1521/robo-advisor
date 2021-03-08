@@ -6,8 +6,11 @@ import requests
 import json
 import dotenv 
 import datetime
-dotenv.load_dotenv()
+from pandas import DataFrame
+import seaborn as sns
+import matplotlib.pyplot as plt
 
+dotenv.load_dotenv()
 #Info Inputs
 symbol_list= []
 print("Welcome to the Robo Advisor! Feel free to enter up to 5 stock symbols at a time, one at a time, using the input below.")
@@ -42,7 +45,7 @@ while True:
         break
     else:
         symbol_list.append(symbol.lower())
-print(symbol_list)
+#print(symbol_list)
 
 for ticker in symbol_list:
     api_key= os.environ.get("ALPHAVANTAGE_API_KEY")
@@ -91,6 +94,15 @@ for ticker in symbol_list:
     else:
         recommendation= "DON'T BUY."
         recommendation_reason= "The recent high is greater than the latest close by more than 10%. This suggests that the stock is recently volatile and risky or is falling from a recent peak."
+    chart_data=[]
+    for date, daily_data in tsd.items():
+        record = {
+            "date": date,
+            "close": float(daily_data["4. close"])
+        }
+        chart_data.append(record)
+    #print(chart_data[0])
+    chart_df=DataFrame(chart_data)
     #breakpoint()
     #Info Outputs
 
@@ -115,6 +127,9 @@ for ticker in symbol_list:
     print("-------------------------")
     print("HAPPY INVESTING!")
     print("-------------------------")
+
+    sns.lineplot(data=chart_df, x="date", y="close")
+    plt.show()
 
     #csv_file_path= "data/prices.csv"
 
