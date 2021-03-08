@@ -11,6 +11,12 @@ dotenv.load_dotenv()
 #Info Inputs
 
 symbol= input("Please specify the stock symbol you wish to acquire data for: ")
+try:
+    int(symbol)
+    print("Looks like you entered a number! Please try again.")
+    quit()
+except ValueError:
+    pass
 #print(type(symbol))
 api_key= os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url= f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
@@ -53,10 +59,10 @@ recommendation_guide= float(recent_high)/float(latest_close)
 #print(recommendation_guide)
 if recommendation_guide <= 1.1:
     recommendation= "BUY!"
-    recommendation_reason= "The recent high is greater than the latest close by 10 percent or less. This suggests that the stock has not been volatile recently."
+    recommendation_reason= "The recent high is greater than the latest close by 10 percent or less. This suggests that the stock has not been volatile recently or is on an upward projection."
 else:
     recommendation= "DON'T BUY."
-    recommendation_reason= "The recent high is greater than the latest close by more than 10 percent. This suggests that the stock is recently volatile and risky."
+    recommendation_reason= "The recent high is greater than the latest close by more than 10 percent. This suggests that the stock is recently volatile and risky or is falling from a recent peak."
 #breakpoint()
 #Info Outputs
 
@@ -64,7 +70,7 @@ else:
 
 
 print("-------------------------")
-print("SELECTED SYMBOL:", symbol)
+print("SELECTED SYMBOL:", symbol.upper())
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 print("REQUEST AT:", now.strftime("%Y-%m-%d %I:%M %p"))
