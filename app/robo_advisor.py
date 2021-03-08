@@ -11,11 +11,18 @@ dotenv.load_dotenv()
 #Info Inputs
 
 symbol= input("Please specify the stock symbol you wish to acquire data for: ")
+
 try:
     int(symbol)
     print("Looks like you entered a number! Please try again.")
     quit()
 except ValueError:
+    pass
+
+if len(symbol)<1 or len(symbol)>5:
+    print("Please enter a stock identifier that has between 1 to 5 characters. Try again!")
+    quit()
+else:
     pass
 #print(type(symbol))
 api_key= os.environ.get("ALPHAVANTAGE_API_KEY")
